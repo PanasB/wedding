@@ -21,17 +21,45 @@
     });
   }
 
-  /** หน้าจดหมาย: กดซองแล้วฝาซองเปิดก่อนไปหน้าข้อมูล */
+  /** ใส่ class is-visible ให้ [data-reveal] เมื่อเลื่อนมาถึง เพื่อเล่นอนิเมชันปรากฏ */
+  function initReveal() {
+    const targets = document.querySelectorAll("[data-reveal]");
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15 }
+    );
+    targets.forEach((el) => observer.observe(el));
+  }
+
+  /** เวลาที่ฝาซองเปิดและกระดาษเลื่อนออกจนสุด ก่อนเปลี่ยนไปหน้าข้อมูล */
+  const OPEN_LETTER_MS = 1200;
+
+  /** หน้าจดหมาย: กดซองแล้วฝาซองเปิด กระดาษเลื่อนออก แล้วจึงไปหน้าข้อมูล */
   function initLetter() {
     const link = byId("open-letter");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     link.addEventListener("click", (event) => {
       if (reduceMotion || event.metaKey || event.ctrlKey) return;
       event.preventDefault();
+      if (link.classList.contains("is-open")) return;
       link.classList.add("is-open");
       setTimeout(() => {
         window.location.href = link.href;
-      }, 650);
+      }, OPEN_LETTER_MS);
+    });
+    // กลับมาด้วยปุ่มย้อนกลับของเบราว์เซอร์ (bfcache) ให้ซองปิดเหมือนเดิม
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) link.classList.remove("is-open");
     });
   }
 
@@ -52,8 +80,9 @@
     });
 
     const timeline = byId("timeline");
-    cfg.schedule.forEach((item) => {
+    cfg.schedule.forEach((item, index) => {
       const li = document.createElement("li");
+      li.style.setProperty("--i", String(index));
       const time = document.createElement("time");
       time.textContent = item.time;
       const title = document.createElement("span");
@@ -119,9 +148,11 @@
     const status = byId("form-status");
     const guestsField = byId("guests-field");
 
-    function setStatus(text, isError) {
+    /** kind: "error" | "success" | undefined (ข้อความระหว่างดำเนินการ) */
+    function setStatus(text, kind) {
       status.textContent = text;
-      status.classList.toggle("error", Boolean(isError));
+      status.classList.toggle("error", kind === "error");
+      status.classList.toggle("success", kind === "success");
     }
 
     // ตอบว่าไม่มา: ซ่อนช่องจำนวนคน และไม่ส่งค่านี้ไปด้วย
@@ -137,11 +168,11 @@
       event.preventDefault();
       if (!form.checkValidity()) {
         form.reportValidity();
-        setStatus("กรุณากรอกชื่อและเลือกว่าจะมาร่วมงานหรือไม่", true);
+        setStatus("กรุณากรอกชื่อและเลือกว่าจะมาร่วมงานหรือไม่", "error");
         return;
       }
       if (!cfg.rsvpEndpoint) {
-        setStatus("ระบบตอบรับยังไม่เปิด กรุณาติดต่อเจ้าภาพโดยตรง", true);
+        setStatus("ระบบตอบรับยังไม่เปิด กรุณาติดต่อเจ้าภาพโดยตรง", "error");
         return;
       }
       const button = form.querySelector("button");
@@ -155,10 +186,10 @@
           body: new FormData(form),
         });
         form.reset();
-        setStatus("ขอบคุณสำหรับคำตอบ แล้วพบกันในงานนะ");
+        setStatus("ขอบคุณสำหรับคำตอบ แล้วพบกันในงานนะ", "success");
       } catch (err) {
         console.error("RSVP submit failed", err);
-        setStatus("ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", true);
+        setStatus("ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
       } finally {
         button.disabled = false;
       }
@@ -166,6 +197,7 @@
   }
 
   renderShared();
+  initReveal();
   const pages = { letter: initLetter, details: initDetails, rsvp: initRsvp };
   const init = pages[document.body.dataset.page];
   if (init) init();

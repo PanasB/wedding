@@ -121,9 +121,12 @@ h1 {
   aspect-ratio: 3 / 2;
   background: linear-gradient(160deg, var(--color-accent) 0%, var(--color-accent-strong) 100%);
   box-shadow: 0 18px 36px -18px rgba(104, 31, 33, 0.55);
-  overflow: hidden;
 }
 
+/*
+ * ลำดับชั้นของซอง (ล่างขึ้นบน): ตัวซองด้านหลัง → กระดาษจดหมาย → กระเป๋าซองด้านหน้า
+ * → ฝาซอง → ตราครั่ง · กระดาษจึงซ่อนอยู่หลังกระเป๋าซอง และโผล่ขึ้นมาเมื่อฝาซองเปิด
+ */
 .envelope::before,
 .envelope::after {
   content: "";
@@ -131,28 +134,56 @@ h1 {
   inset: 0;
 }
 
+.paper {
+  position: absolute;
+  z-index: 1;
+  left: 7%;
+  right: 7%;
+  top: 6%;
+  bottom: 8%;
+  display: flex;
+  justify-content: center;
+  padding-top: 8%;
+  background: #fffdf8;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+}
+.paper-text {
+  font-family: var(--font-script);
+  font-size: clamp(1.1rem, 5vw, 1.5rem);
+  color: var(--color-accent);
+}
+
+/* กระเป๋าซองด้านหน้า พร้อมเส้นพับ */
+.envelope::after {
+  z-index: 2;
+  clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1px), rgba(0, 0, 0, 0.18) 50%, transparent calc(50% + 1px)) left bottom / 50% 60% no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 1px), rgba(0, 0, 0, 0.18) 50%, transparent calc(50% + 1px)) right bottom / 50% 60% no-repeat,
+    linear-gradient(160deg, var(--color-accent) 0%, var(--color-accent-strong) 100%);
+}
+
 /* ฝาซองด้านบน */
 .envelope::before {
+  z-index: 3;
   background: linear-gradient(180deg, #7a2224 0%, var(--color-accent-strong) 100%);
   clip-path: polygon(0 0, 100% 0, 50% 58%);
   filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
   transition: clip-path 0.5s ease;
 }
 
-/* กดซองแล้ว: ฝาซองพับขึ้น ตราครั่งจางหาย */
+/* กดซองแล้ว: ฝาซองพับขึ้น ตราครั่งจางหาย กระดาษเลื่อนออกจากซอง */
 .is-open .envelope::before { clip-path: polygon(0 0, 100% 0, 50% 0); }
 .is-open .seal { opacity: 0; }
-
-/* เส้นพับด้านล่าง */
-.envelope::after {
-  background:
-    linear-gradient(to top right, transparent calc(50% - 1px), rgba(0, 0, 0, 0.18) 50%, transparent calc(50% + 1px)) left bottom / 50% 60% no-repeat,
-    linear-gradient(to top left, transparent calc(50% - 1px), rgba(0, 0, 0, 0.18) 50%, transparent calc(50% + 1px)) right bottom / 50% 60% no-repeat;
-}
+.is-open .paper { transform: translateY(-58%); }
+/* ข้อความรอบซองจางไป เพื่อไม่ให้กระดาษที่เลื่อนขึ้นมาทับชื่อ */
+.letter > :not(.envelope-link) { transition: opacity 0.4s ease; }
+.letter:has(.is-open) > :not(.envelope-link) { opacity: 0; }
 
 .seal {
   position: absolute;
-  z-index: 1;
+  z-index: 4;
   left: 50%;
   top: 58%;
   width: 22%;
@@ -169,11 +200,6 @@ h1 {
   transition: opacity 0.3s ease;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .envelope-link,
-  .envelope::before,
-  .seal { transition: none; }
-}
 
 .date {
   margin: 0;
@@ -432,3 +458,90 @@ footer {
   padding: calc(var(--space) * 3) var(--space);
   font-family: var(--font-display);
 }
+
+/* =====================================================================
+ * อนิเมชัน — ทำงานเฉพาะเมื่อเครื่องไม่ได้ตั้งค่าให้ลดภาพเคลื่อนไหว
+ * ===================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  /* เปลี่ยนหน้าแบบจาง (เบราว์เซอร์ที่รองรับ View Transitions) */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: fade-out 0.35s ease both; }
+  ::view-transition-new(root) { animation: fade-in 0.45s ease both; }
+
+  /* เนื้อหาส่วนบนของทุกหน้าค่อย ๆ ลอยขึ้นมาทีละชิ้น */
+  .letter > *,
+  .details-hero > *,
+  .rsvp > :not(form),
+  .page-nav {
+    animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .letter > :nth-child(2),
+  .details-hero > :nth-child(2),
+  .rsvp > :nth-child(2) { animation-delay: 0.12s; }
+  .letter > :nth-child(3),
+  .details-hero > :nth-child(3),
+  .rsvp > :nth-child(3) { animation-delay: 0.24s; }
+  .letter > :nth-child(4),
+  .details-hero > :nth-child(4) { animation-delay: 0.36s; }
+  .details-hero > :nth-child(5) { animation-delay: 0.48s; }
+
+  /* ซองลอยเบา ๆ และตราครั่งมีแสงวาบ */
+  .envelope { animation: float 4.5s ease-in-out 1s infinite; }
+  .is-open .envelope { animation-play-state: paused; }
+  .envelope-link { transition: transform 0.25s ease; }
+  .envelope-link:hover { transform: translateY(-4px) scale(1.02); }
+  .seal { animation: glint 3.2s ease-in-out 1.5s infinite; }
+
+  /* การ์ดและฟอร์มค่อย ๆ ปรากฏเมื่อเลื่อนมาถึง */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+  /* กำหนดการไล่ขึ้นทีละบรรทัด */
+  .js #schedule .timeline li {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition-delay: calc(0.25s + var(--i, 0) * 90ms);
+  }
+  .js #schedule.is-visible .timeline li { opacity: 1; transform: none; }
+
+  /* จุดสี Dress code เด้งขึ้นมา */
+  .js #dress-code .swatch { transform: scale(0); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .js #dress-code .swatches li:nth-child(2) .swatch { transition-delay: 0.08s; }
+  .js #dress-code .swatches li:nth-child(3) .swatch { transition-delay: 0.16s; }
+  .js #dress-code .swatches li:nth-child(4) .swatch { transition-delay: 0.24s; }
+  .js #dress-code.is-visible .swatch { transform: scale(1); }
+
+  /* ตัวเลขวินาทีขยับทุกครั้งที่เปลี่ยน */
+  .countdown div:last-child strong { animation: tick 0.45s ease-out; }
+
+  /* ปุ่ม */
+  .btn, .rsvp-submit { transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+  .btn:hover, .rsvp-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -10px rgba(104, 31, 33, 0.7); }
+  .btn:active, .rsvp-submit:active { transform: translateY(0) scale(0.98); }
+
+  /* ตัวเลือกในฟอร์ม */
+  .choice span { transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease; }
+  .choice:hover span { transform: translateX(3px); }
+  .choice input:checked + span { animation: pop 0.3s ease; }
+
+  /* ข้อความสถานะของฟอร์ม */
+  .form-status:not(:empty) { animation: rise 0.4s ease both; }
+  .form-status.success::before { content: "♥ "; display: inline-block; animation: beat 1.2s ease-in-out infinite; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes float { 50% { transform: translateY(-8px); } }
+@keyframes glint {
+  0%, 70%, 100% { filter: brightness(1); }
+  80% { filter: brightness(1.18); }
+}
+@keyframes tick { from { opacity: 0.2; transform: translateY(-6px); } }
+@keyframes pop { 50% { transform: scale(1.03); } }
+@keyframes beat { 50% { transform: scale(1.25); } }

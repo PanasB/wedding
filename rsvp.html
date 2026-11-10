@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&family=Noto+Serif+Thai:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body data-page="rsvp">
   <nav class="page-nav"><a class="text-link" href="details.html">← Go back</a></nav>
@@ -21,7 +22,7 @@
         กรุณาตอบรับคำเชิญภายในวันที่ <span data-bind="rsvpDeadline"></span>”
       </p>
 
-      <form class="rsvp-card" id="rsvp-form" novalidate>
+      <form class="rsvp-card" data-reveal id="rsvp-form" novalidate>
         <div class="rsvp-card-head">
           <p class="rsvp-card-title">คำเชิญร่วมงานแต่งงาน</p>
           <p class="rsvp-card-names" id="rsvp-names"></p>
