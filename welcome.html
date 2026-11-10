@@ -15,12 +15,41 @@
     <p class="letter-from">A letter from</p>
     <h1><span data-bind="names.0"></span> <span class="amp">&amp;</span> <span data-bind="names.1"></span></h1>
     <a class="envelope-link" id="open-letter" href="home.html" aria-label="เปิดการ์ดเชิญ">
-      <span class="envelope" aria-hidden="true">
+      <span class="envelope envelope--image" aria-hidden="true">
+        <span class="env-inside"></span>
         <span class="paper"><span class="paper-text">You're invited</span></span>
-        <span class="seal" data-initials></span>
+        <span class="env-layer env-pocket"></span>
+        <span class="env-flap">
+          <span class="env-flap-front"><span class="env-layer env-flap-face"></span><span class="env-patch env-patch--flap"></span></span>
+          <span class="env-flap-back"></span>
+        </span>
+        <span class="env-layer env-seal"></span>
+        <span class="decos">
+          <span class="deco deco--dove" style="aspect-ratio: 164 / 189">
+            <img src="images/deco/vine.webp" alt="" style="left:0.00%;top:21.16%;width:100.00%;--d:450ms" />
+            <img src="images/deco/tr-6.webp" alt="" style="left:51.83%;top:29.10%;width:48.78%;--d:1000ms" />
+            <img src="images/deco/tr-2.webp" alt="" style="left:17.07%;top:29.63%;width:20.12%;--d:750ms" />
+            <img src="images/deco/white-flower.webp" alt="" style="left:45.73%;top:27.51%;width:25.00%;--d:900ms" />
+            <img src="images/deco/white-flower.webp" alt="" style="left:65.85%;top:33.86%;width:22.56%;--d:1050ms" />
+            <img src="images/deco/tr-5.webp" alt="" style="left:59.76%;top:42.33%;width:21.34%;--d:1350ms" />
+            <img src="images/deco/tr-3.webp" alt="" style="left:46.34%;top:0.00%;width:48.17%;--d:450ms" />
+          </span>
+          <span class="deco deco--flowers" style="aspect-ratio: 164 / 170">
+            <img src="images/deco/vine.webp" alt="" style="left:0.00%;top:72.35%;width:100.00%;--d:2500ms" />
+            <img src="images/deco/bl-3.webp" alt="" style="left:9.15%;top:20.59%;width:26.83%;--d:1500ms" />
+            <img src="images/deco/bl-1.webp" alt="" style="left:15.85%;top:0.00%;width:34.15%;--d:1500ms" />
+            <img src="images/deco/bl-4.webp" alt="" style="left:9.76%;top:52.94%;width:29.27%;--d:1900ms" />
+            <img src="images/deco/bl-4.webp" alt="" style="left:25.61%;top:80.00%;width:21.34%;--d:2300ms" />
+            <img src="images/deco/bl-4.webp" alt="" style="left:56.10%;top:67.06%;width:21.34%;--d:2400ms" />
+            <img src="images/deco/bl-2.webp" alt="" style="left:22.56%;top:14.71%;width:32.93%;--d:1700ms" />
+            <img src="images/deco/white-flower.webp" alt="" style="left:46.95%;top:75.29%;width:23.78%;--d:2500ms" />
+            <img src="images/deco/bl-5.webp" alt="" style="left:29.27%;top:64.12%;width:21.34%;--d:2100ms" />
+            <img src="images/deco/bl-5.webp" alt="" style="left:69.51%;top:80.00%;width:11.59%;--d:2700ms" />
+          </span>
+        </span>
       </span>
     </a>
-    <a class="text-link" href="home.html">Open the invitation</a>
+    <a class="text-link" href="home.html" data-open-letter>Open the invitation</a>
   </main>
 
   <script src="config.js"></script>

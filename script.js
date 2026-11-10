@@ -69,13 +69,13 @@
   }
 
   /** เวลาที่ฝาซองเปิดและกระดาษเลื่อนออกจนสุด ก่อนเปลี่ยนไปหน้า home */
-  const OPEN_LETTER_MS = 1200;
+  const OPEN_LETTER_MS = 2000;
 
   /** หน้า welcome: กดซองแล้วฝาซองเปิด กระดาษเลื่อนออก แล้วจึงไปหน้า home */
   function initWelcome() {
     const link = byId("open-letter");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    link.addEventListener("click", (event) => {
+    function openLetter(event) {
       if (reduceMotion || event.metaKey || event.ctrlKey) return;
       event.preventDefault();
       if (link.classList.contains("is-open")) return;
@@ -83,10 +83,20 @@
       setTimeout(() => {
         window.location.href = link.href;
       }, OPEN_LETTER_MS);
-    });
-    // กลับมาด้วยปุ่มย้อนกลับของเบราว์เซอร์ (bfcache) ให้ซองปิดเหมือนเดิม
+    }
+    // กดซองหรือปุ่ม "Open the invitation" ก็เปิดซองแบบเดียวกัน
+    link.addEventListener("click", openLetter);
+    document.querySelectorAll("[data-open-letter]").forEach((el) => el.addEventListener("click", openLetter));
+
+    // กลับมาจาก bfcache ซองยังเปิดค้าง: ปิดทันทีโดยไม่เล่นอนิเมชันย้อน
+    // (ถ้าปล่อยให้ transition เล่นถอยหลัง ฝา กระดาษ และตราจะขยับสลับลำดับกันผิด)
     window.addEventListener("pageshow", (event) => {
-      if (event.persisted) link.classList.remove("is-open");
+      if (!event.persisted) return;
+      const root = document.documentElement;
+      root.classList.add("is-restoring");
+      link.classList.remove("is-open");
+      void link.offsetWidth; // ให้เบราว์เซอร์ใช้สถานะปิดก่อนเปิด transition กลับ
+      requestAnimationFrame(() => root.classList.remove("is-restoring"));
     });
   }
 

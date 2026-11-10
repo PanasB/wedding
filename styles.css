@@ -920,3 +920,222 @@ footer {
   font-size: clamp(1.8rem, 8vw, 2.4rem);
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
 }
+
+/* =====================================================================
+ * หน้า welcome: ซองจดหมายจากภาพในแบบ (images/envelope.svg) แบ่งเป็นชั้นเพื่อให้เปิดได้จริง
+ * ทุกชั้นใช้ภาพเดียวกันแล้วตัดคนละส่วน ตอนปิดจึงซ้อนกันได้เหมือนภาพเดิมทุกจุด
+ *
+ * ชั้น (ล่างขึ้นบน): ด้านในซอง → กระดาษ → กระเป๋าซองด้านหน้า → ฝาซอง → ตราครั่ง
+ * ฝาซองเป็นสามเหลี่ยมจากขอบบนลงมาถึงตราครั่ง (ปลายอยู่ราว 50% 57%)
+ * ===================================================================== */
+.envelope--image {
+  /*
+   * รูปทรงฝาวัดจากภาพ: รวมแถบเงาใต้ขอบฝาด้วย เพื่อให้ฝาทั้งแผ่นพับขึ้นไปพร้อมกัน
+   * จุดวัด (ซ้าย→กลาง): 0% → 19.7% · 6% → 26% · 20% → 39.4% · 35% → 54.9% · 50% → 71%
+   * ปลายกลางเลื่อนลงเป็น 74% เพราะขอบล่างของตราครั่งต่ำกว่าปลายฝาเล็กน้อย
+   * ฝาลงต่ำกว่ากระเป๋า 1% เพื่อปิดรอยต่อ (ภาพเดียวกัน ทับกันจึงไม่เห็น)
+   */
+  --env-flap-shape: polygon(0 0, 100% 0, 100% 20.7%, 94% 27%, 80% 40.4%, 65% 55.9%, 50% 75%, 35% 55.9%, 20% 40.4%, 6% 27%, 0 20.7%);
+  --env-pocket-shape: polygon(0 19.7%, 6% 26%, 20% 39.4%, 35% 54.9%, 50% 74%, 65% 54.9%, 80% 39.4%, 94% 26%, 100% 19.7%, 100% 100%, 0 100%);
+  --env-seal-shape: circle(9% at 50% 60%);
+  width: min(360px, 86vw);
+  aspect-ratio: 267 / 189.75;
+  background: none;
+  box-shadow: 0 22px 32px -20px rgba(104, 31, 33, 0.55);
+  perspective: 900px;
+}
+.envelope--image::before,
+.envelope--image::after { display: none; }
+
+.env-layer {
+  position: absolute;
+  inset: 0;
+  background: url("images/envelope.svg") center / 100% 100% no-repeat;
+}
+
+.env-inside {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: linear-gradient(180deg, #3a080c 0%, #5a1016 70%);
+}
+
+.envelope--image .paper {
+  z-index: 2;
+  top: 5%;
+  bottom: 10%;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.95s;
+}
+
+/*
+ * แยกกระเป๋าซองและตราครั่งเป็นชั้นของตัวเองตั้งแต่แรก
+ * ไม่งั้น Chromium จะแยกชั้นให้กลางอนิเมชัน (ตอนฝาย้ายไปหลังกระดาษ) แล้ววาดชั้นนั้นโดยไม่ตัดตาม clip-path
+ * ผลคือภาพซองปิดทั้งใบโผล่ซ้อนขึ้นมาระหว่างเปิด
+ */
+.env-pocket { z-index: 3; clip-path: var(--env-pocket-shape); transform: translateZ(0); }
+
+/*
+ * ฝาซองสองหน้า: หน้าเป็นภาพจากแบบ · ในเป็นสีด้านในซอง
+ * สลับหน้าตอนฝาตั้งฉาก (90°) ซึ่งฝาบางเป็นเส้น จึงไม่เห็นรอยสลับ
+ * ไม่ใช้ preserve-3d + backface-visibility เพราะ Chromium วาดหน้าที่ซ่อนผิดระหว่างอนิเมชัน
+ * (เห็นภาพซองปิดทั้งใบซ้อนขึ้นมา) เมื่อหน้านั้นมี clip-path
+ */
+.env-flap {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  transform-origin: 50% 0;
+  transition:
+    transform 0.7s cubic-bezier(0.45, 0, 0.2, 1) 0.3s,
+    z-index 0s linear 0.65s;
+}
+.env-flap-front,
+.env-flap-back {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0s linear 0.65s;
+}
+.env-flap-face { clip-path: var(--env-flap-shape); }
+.env-flap-back {
+  opacity: 0;
+  clip-path: var(--env-flap-shape);
+  background: linear-gradient(180deg, #5a1016 0%, #3a080c 100%);
+}
+.is-open .env-flap-front { opacity: 0; }
+.is-open .env-flap-back { opacity: 1; }
+
+.env-seal {
+  z-index: 5;
+  clip-path: var(--env-seal-shape);
+  transform-origin: 50% 60%;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+
+/*
+ * รอยตราครั่ง: ตราอยู่บนฝา เมื่อตราหลุดจึงปิดรอยด้วยสีฝาตรงจุดนั้น
+ * (สีวัดจากภาพ: ฝาซองรอบตรา #6e0915) · ขอบนุ่มเพื่อให้กลืนกับลายภาพ
+ */
+.env-patch {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.env-patch--flap {
+  clip-path: var(--env-flap-shape);
+  background: radial-gradient(circle at 50% 60%, #6e0915 0 15%, rgba(110, 9, 21, 0) 21%);
+}
+.is-open .env-patch { opacity: 1; }
+
+/* กดเปิด: ตราครั่งหลุด → ฝาพับขึ้นจนเห็นด้านใน แล้วไปอยู่หลังกระดาษ → กระดาษเลื่อนออก */
+.is-open .env-seal { transform: scale(1.25); opacity: 0; }
+.is-open .env-flap { transform: rotateX(180deg); z-index: 1; }
+.is-open .envelope--image .paper { transform: translateY(-62%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .env-flap, .env-seal, .envelope--image .paper { transition: none; }
+}
+
+/* กลับมาหน้า welcome จาก bfcache: ปิดซองทันที ไม่เล่น transition ย้อน (ดู pageshow ใน script.js) */
+:root.is-restoring .letter,
+:root.is-restoring .letter * {
+  transition: none;
+  animation: none;
+}
+
+/* ตราครั่งบนซองจากแบบเรืองแสงวาบเป็นระยะ แบบเดียวกับตราครั่งรุ่นแรก (keyframes glint) */
+@media (prefers-reduced-motion: no-preference) {
+  .env-seal { animation: glint 3.2s ease-in-out 1.5s infinite; }
+  .is-open .env-seal { animation: none; }
+}
+
+/* =====================================================================
+ * หน้า welcome: ช่อดอกไม้กับนกพิราบเกาะมุมซองตามแบบ Canva
+ * ตำแหน่งวัดจากแบบ (เทียบกับกรอบซอง): นกพิราบมุมขวาบน · ดอกไม้มุมซ้ายล่าง กว้าง 46% ของซอง
+ * ===================================================================== */
+.letter { overflow-x: clip; } /* ดอกไม้ยื่นพ้นซอง ห้ามทำให้หน้าเลื่อนข้างได้บนจอแคบ */
+.envelope--image { width: min(360px, 76vw); }
+
+/* ชั้นห่อดอกไม้: ใช้จางตอนเปิดซอง (ตัวภาพมีอนิเมชันของตัวเอง ซึ่งจะทับค่า opacity ที่ตั้งบนตัวภาพ) */
+.decos {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+/* แต่ละมุมเป็นกล่องสัดส่วนเท่าช่อเต็ม · ชิ้นส่วนวางตามตำแหน่งที่เทียบจากช่อเต็ม (% ของกล่อง) */
+.deco {
+  position: absolute;
+  width: 46%;
+}
+.deco img {
+  position: absolute;
+  height: auto;
+  display: block;
+}
+.deco--dove { left: 66.6%; top: -25%; }
+.deco--flowers { left: -18.5%; top: 40.5%; }
+
+/*
+ * กดเปิดซอง: ชิ้นในช่อแยกกันลอยออกและจางหาย (ชิ้นที่เข้าหลังสุดออกก่อน)
+ * มุมขวาบนลอยขึ้นไปทางขวา · มุมซ้ายล่างร่วงลงไปทางซ้าย · นกพิราบบินออกไกลกว่าชิ้นอื่น
+ */
+.deco--dove img { --dx: 22px; --dy: -16px; --rot: 10deg; }
+.deco--flowers img { --dx: -20px; --dy: 18px; --rot: -10deg; }
+.deco--dove img[src$="tr-3.webp"] { --dx: 90px; --dy: -70px; --rot: -12deg; --out: 1.1s; }
+.deco img:nth-last-child(1) { --ld: 0ms; }
+.deco img:nth-last-child(2) { --ld: 70ms; }
+.deco img:nth-last-child(3) { --ld: 140ms; }
+.deco img:nth-last-child(4) { --ld: 210ms; }
+.deco img:nth-last-child(5) { --ld: 280ms; }
+.deco img:nth-last-child(6) { --ld: 350ms; }
+.deco img:nth-last-child(7) { --ld: 420ms; }
+.deco img:nth-last-child(8) { --ld: 490ms; }
+.deco img:nth-last-child(9) { --ld: 560ms; }
+.deco img:nth-last-child(10) { --ld: 630ms; }
+.deco--dove img[src$="tr-3.webp"] { --ld: 120ms; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-open .deco img {
+    animation: deco-piece-out var(--out, 0.8s) cubic-bezier(0.4, 0, 0.2, 1) var(--ld, 0ms) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-open .decos { opacity: 0; }
+}
+@keyframes deco-piece-out {
+  to {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--rot, 0deg)) scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /*
+   * ชิ้นในช่อจางเข้าทีละชิ้นตามแบบ Canva · เวลาเริ่มของแต่ละชิ้นอยู่ที่ --d ใน welcome.html
+   * (มุมขวาบน: เถาไม้+นกพิราบ → ลิลลี่ → ดอกขาว → ช่อห้อย → กุหลาบ · แล้วมุมซ้ายล่างตาม)
+   */
+  .deco img { animation: deco-piece-in 0.5s ease-out var(--d, 0ms) both; }
+
+  /* "Open the invitation" กะพริบเบา ๆ ชวนให้กด */
+  .letter > a.text-link[data-open-letter] {
+    animation:
+      rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both,
+      invite-pulse 2.4s ease-in-out 2s infinite;
+  }
+  /* อนิเมชันกะพริบทับค่าจางตอนเปิดซอง จึงต้องหยุดก่อน */
+  .letter:has(.is-open) > a.text-link[data-open-letter] { animation: none; }
+}
+
+@keyframes deco-piece-in {
+  from { opacity: 0; transform: scale(0.94); }
+}
+@keyframes invite-pulse { 50% { opacity: 0.4; } }
+
+/*
+ * เว้นที่เหนือซองให้นกพิราบ: ช่อมุมขวาบนยื่นพ้นขอบบนซอง 25% ของความสูงซอง
+ * (ความสูงซอง = กว้าง × 189.75/267 ⇒ ยื่น ≈ 18% ของความกว้างซอง) จึงดันชื่อขึ้นเท่านั้น
+ */
+.letter h1 { margin-bottom: calc(min(360px, 76vw) * 0.18 - var(--space) + 12px); }
