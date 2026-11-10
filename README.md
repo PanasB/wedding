@@ -12,7 +12,7 @@
 
 ## แก้เนื้อหา
 
-แก้ที่ [`config.js`](./config.js) ไฟล์เดียว — ค่าที่มีตอนนี้เป็นตัวอย่างทั้งหมด
+แก้ที่ [`config.js`](./config.js) ไฟล์เดียว
 
 ## เปิดดูบนเครื่อง
 
@@ -42,8 +42,22 @@ npx --yes serve .
 
 > ฟอร์มส่งแบบ `no-cors` จึงอ่านผลตอบกลับไม่ได้ — ตรวจข้อมูลที่เข้ามาใน Sheet อีกครั้งหลังทดสอบ
 
-## เผยแพร่
+## เผยแพร่ — ปล่อยทีละ version
 
-- **GitHub Pages** — repo แบบ private ใช้ Pages ได้เฉพาะบัญชี GitHub Pro ขึ้นไป
-  (ไม่งั้นต้องเปลี่ยน repo เป็น public)
-- หรือใช้ Netlify / Vercel / Cloudflare Pages ซึ่งต่อ private repo ได้ฟรี
+เว็บจริงอยู่ที่ <https://panasb.github.io/wedding/> · GitHub Pages ดึงจาก branch **`release`** ไม่ใช่ `main`
+
+| branch | ใช้ทำอะไร |
+|---|---|
+| `main` | งานที่กำลังปรับ · push ได้ทุกเมื่อ เว็บจริงไม่เปลี่ยน |
+| `release` | รุ่นที่ปล่อยแล้ว · ขยับเฉพาะตอนออก version ใหม่ |
+
+ขั้นตอนออก version ใหม่ (ตัวอย่าง `v1.1.0`):
+
+```bash
+git tag -a v1.1.0 -m "v1.1.0 — สรุปสิ่งที่เปลี่ยน"
+git push origin v1.1.0
+git push origin v1.1.0^{commit}:release
+gh release create v1.1.0 --title "v1.1.0" --notes "สรุปสิ่งที่เปลี่ยน"
+```
+
+GitHub Pages จะ build ใหม่ภายในประมาณหนึ่งนาทีหลัง `release` ขยับ
