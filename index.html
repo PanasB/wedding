@@ -12,7 +12,8 @@
 <body>
   <header class="hero">
     <p class="letter-from">A letter from</p>
-    <h1><span data-bind="groom"></span> <span class="amp">&amp;</span> <span data-bind="bride"></span></h1>
+    <h1><span data-bind="names.0"></span> <span class="amp">&amp;</span> <span data-bind="names.1"></span></h1>
+    <p class="full-names" data-bind="fullNames"></p>
     <div class="envelope" aria-hidden="true">
       <span class="seal" id="seal"></span>
     </div>
@@ -26,7 +27,11 @@
     <section class="card" id="schedule">
       <h2>กำหนดการ</h2>
       <ol class="timeline" id="timeline"></ol>
-      <p class="muted">การแต่งกาย: <span data-bind="dressCode"></span></p>
+    </section>
+
+    <section class="card" id="dress-code">
+      <h2>Dress Code</h2>
+      <ul class="swatches" id="swatches"></ul>
     </section>
 
     <section class="card" id="venue">
@@ -38,7 +43,8 @@
 
     <section class="card" id="rsvp">
       <h2>ตอบรับคำเชิญ</h2>
-      <p class="muted">กรุณาตอบกลับภายใน <span data-bind="rsvpDeadline"></span></p>
+      <p class="rsvp-message" data-bind="rsvpMessage"></p>
+      <p class="muted">กรุณาตอบรับคำเชิญภายในวันที่ <span data-bind="rsvpDeadline"></span></p>
       <form id="rsvp-form" novalidate>
         <label>ชื่อ-นามสกุล
           <input name="name" required maxlength="100" autocomplete="name" />

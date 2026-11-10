@@ -10,11 +10,24 @@
   document.querySelectorAll("[data-bind]").forEach((el) => {
     el.textContent = pick(el.dataset.bind) ?? "";
   });
-  document.title = `${cfg.groom} & ${cfg.bride} — การ์ดเชิญงานแต่ง`;
+  document.title = `${cfg.names.join(" & ")} — การ์ดเชิญงานแต่ง`;
   document.getElementById("map-link").href = cfg.venue.mapUrl;
   // อักษรย่อบนตราครั่ง: อักษรแรกของชื่อทั้งสอง
-  document.getElementById("seal").textContent =
-    `${(cfg.groom || "").charAt(0)}${(cfg.bride || "").charAt(0)}`;
+  document.getElementById("seal").textContent = cfg.names
+    .map((n) => n.charAt(0))
+    .join("");
+
+  const swatches = document.getElementById("swatches");
+  cfg.dressCode.forEach((item) => {
+    const li = document.createElement("li");
+    const dot = document.createElement("span");
+    dot.className = "swatch";
+    dot.style.backgroundColor = item.color;
+    const label = document.createElement("span");
+    label.textContent = item.name;
+    li.append(dot, label);
+    swatches.append(li);
+  });
 
   const timeline = document.getElementById("timeline");
   cfg.schedule.forEach((item) => {
