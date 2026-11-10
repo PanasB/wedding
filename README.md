@@ -2,12 +2,22 @@
 
 เว็บการ์ดเชิญงานแต่ง (HTML/CSS/JS ล้วน ไม่ต้อง build) แบ่งเป็นสี่หน้าตามแบบ Canva
 
-| หน้า | ไฟล์ | มีอะไร |
-|---|---|---|
-| 1. Welcome | `welcome.html` | ซองจดหมายพร้อมตราครั่ง กดซองแล้วฝาซองเปิดและไปหน้า home |
-| 2. Home | `home.html` | ชื่อ วันงาน นับถอยหลัง ปุ่มไปหน้า details และ RSVP |
-| 3. Details | `details.html` | กำหนดการ Dress code สถานที่ + Google Maps |
-| 4. RSVP | `rsvp.html` | ฟอร์มตอบรับ ส่งเข้า Google Sheets ได้ |
+## แบบอ้างอิง (Design)
+
+หน้าตาเว็บทั้งหมดอ้างอิงจากแบบที่เจ้าสาวออกแบบไว้ใน Canva: **<https://ibex-0w7pcc.my.canva.site/>**
+ถ้าเว็บกับแบบไม่ตรงกัน ให้ยึดแบบเป็นหลัก
+
+| หน้า | ไฟล์ | มีอะไร | แบบใน Canva |
+|---|---|---|---|
+| 1. Welcome | `welcome.html` | ซองจดหมายพร้อมตราครั่ง กดซองแล้วฝาซองเปิดและไปหน้า home | [หน้าแรก](https://ibex-0w7pcc.my.canva.site/) |
+| 2. Home | `home.html` | ชื่อ วันงาน นับถอยหลัง ปุ่มไปหน้า details และ RSVP | [page-2](https://ibex-0w7pcc.my.canva.site/page-2) |
+| 3. Details | `details.html` | กำหนดการ Dress code สถานที่ + Google Maps | [page-3](https://ibex-0w7pcc.my.canva.site/page-3) |
+| 4. RSVP | `rsvp.html` | ฟอร์มตอบรับ ส่งเข้า Google Sheets ได้ | [page-4](https://ibex-0w7pcc.my.canva.site/page-4) |
+
+ภาพตกแต่งและฟอนต์ในแบบเป็นของ Canva ใช้นอก Canva ไม่ได้ เว็บนี้จึงใช้ฟอนต์ฟรีที่หน้าตาใกล้กันแทน
+ส่วนภาพตกแต่งต้องให้เจ้าสาวดาวน์โหลดจาก Canva เอง
+
+## หน้าในเว็บ
 
 `index.html` พาไปหน้า welcome อัตโนมัติ (ลิงก์หลักของเว็บ)
 
