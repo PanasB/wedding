@@ -10,19 +10,12 @@
   <link rel="stylesheet" href="styles.css" />
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body data-page="details">
-  <nav class="page-nav"><a class="text-link" href="index.html">← Go back</a></nav>
+<body data-page="details" class="theme-dark">
+  <nav class="page-nav"><a class="text-link" href="home.html">← Go back</a></nav>
 
-  <header class="details-hero">
-    <h1><span data-bind="names.0"></span> <span class="amp">&amp;</span> <span data-bind="names.1"></span></h1>
-    <p class="full-names" data-bind="fullNames"></p>
-    <p class="date" data-bind="dateText"></p>
+  <header class="page-title">
+    <h1>The Details</h1>
   </header>
-
-  <section class="celebrate" aria-label="นับถอยหลังถึงวันงาน">
-    <p class="celebrate-title" data-bind="greeting"></p>
-    <div class="countdown" id="countdown"></div>
-  </section>
 
   <main>
     <section class="card" data-reveal id="schedule">

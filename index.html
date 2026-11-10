@@ -4,26 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>การ์ดเชิญงานแต่ง</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&family=Noto+Serif+Thai:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script>document.documentElement.classList.add("js");</script>
+  <!-- ลิงก์หลักของเว็บ (/) พาไปหน้า welcome -->
+  <meta http-equiv="refresh" content="0; url=welcome.html" />
+  <script>location.replace("welcome.html");</script>
 </head>
-<body data-page="letter">
-  <main class="letter">
-    <p class="letter-from">A letter from</p>
-    <h1><span data-bind="names.0"></span> <span class="amp">&amp;</span> <span data-bind="names.1"></span></h1>
-    <a class="envelope-link" id="open-letter" href="details.html" aria-label="เปิดการ์ดเชิญ">
-      <span class="envelope" aria-hidden="true">
-        <span class="paper"><span class="paper-text">You're invited</span></span>
-        <span class="seal" data-initials></span>
-      </span>
-    </a>
-    <a class="text-link" href="details.html">Open the invitation</a>
-  </main>
-
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+<body>
+  <p><a href="welcome.html">เปิดการ์ดเชิญ</a></p>
 </body>
 </html>
