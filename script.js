@@ -12,6 +12,9 @@
   });
   document.title = `${cfg.groom} & ${cfg.bride} — การ์ดเชิญงานแต่ง`;
   document.getElementById("map-link").href = cfg.venue.mapUrl;
+  // อักษรย่อบนตราครั่ง: อักษรแรกของชื่อทั้งสอง
+  document.getElementById("seal").textContent =
+    `${(cfg.groom || "").charAt(0)}${(cfg.bride || "").charAt(0)}`;
 
   const timeline = document.getElementById("timeline");
   cfg.schedule.forEach((item) => {

@@ -6,13 +6,17 @@
   <title>การ์ดเชิญงานแต่ง</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;600&family=Noto+Sans+Thai:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&family=Noto+Serif+Thai:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="hero">
-    <p class="eyebrow" data-bind="greeting"></p>
+    <p class="letter-from">A letter from</p>
     <h1><span data-bind="groom"></span> <span class="amp">&amp;</span> <span data-bind="bride"></span></h1>
+    <div class="envelope" aria-hidden="true">
+      <span class="seal" id="seal"></span>
+    </div>
+    <p class="muted" data-bind="greeting"></p>
     <p class="date" data-bind="dateText"></p>
     <div class="countdown" id="countdown" aria-live="polite"></div>
     <a class="btn" href="#rsvp">ตอบรับคำเชิญ</a>
