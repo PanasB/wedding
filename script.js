@@ -127,6 +127,9 @@
       return num;
     });
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let firstRender = true;
+
     function tick() {
       let diff = target - Date.now();
       if (diff <= 0) {
@@ -137,11 +140,79 @@
       units.forEach((unit, i) => {
         const n = Math.floor(diff / unit.ms);
         diff -= n * unit.ms;
-        numbers[i].textContent = String(n).padStart(unit.pad, "0");
+        setDigits(numbers[i], String(n).padStart(unit.pad, "0"), !firstRender && !reduceMotion);
       });
+      firstRender = false;
       setTimeout(tick, 1000);
     }
     tick();
+  }
+
+  /** ระยะเวลาที่ตัวเลขหนึ่งหลักเลื่อนขึ้นตอนค่าเปลี่ยน */
+  const DIGIT_ROLL_MS = 500;
+
+  function digitFace(char) {
+    const face = document.createElement("span");
+    face.className = "digit-face";
+    face.textContent = char;
+    return face;
+  }
+
+  /**
+   * แสดงตัวเลขทีละหลัก · หลักที่ค่าเปลี่ยนจะเลื่อนขึ้น: ตัวเก่าออกด้านบน ตัวใหม่เข้าจากด้านล่าง
+   * จำนวนหลักเปลี่ยน (เช่น วันจาก 100 เหลือ 99) สร้างใหม่ทั้งชุดโดยไม่เล่นอนิเมชัน
+   */
+  function setDigits(container, text, animate) {
+    const chars = [...text];
+    if (container.children.length !== chars.length) {
+      container.replaceChildren(
+        ...chars.map((char) => {
+          const slot = document.createElement("span");
+          slot.className = "digit";
+          slot.dataset.value = char;
+          slot.append(digitFace(char));
+          return slot;
+        })
+      );
+      return;
+    }
+    chars.forEach((char, i) => {
+      const slot = container.children[i];
+      if (slot.dataset.value === char) return;
+      slot.dataset.value = char;
+      rollDigit(slot, char, animate);
+    });
+  }
+
+  function rollDigit(slot, char, animate) {
+    const next = digitFace(char);
+    if (!animate || typeof next.animate !== "function") {
+      slot.replaceChildren(next);
+      return;
+    }
+    // ตัดตัวที่ยังเลื่อนค้างจากรอบก่อนทิ้ง เหลือตัวที่แสดงอยู่ตัวเดียว
+    const current = slot.lastElementChild;
+    slot.replaceChildren(current);
+    next.classList.add("is-entering");
+    slot.append(next);
+    const timing = { duration: DIGIT_ROLL_MS, easing: "cubic-bezier(0.22, 1, 0.36, 1)" };
+    current.animate(
+      [{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(-100%)", opacity: 0 }],
+      timing
+    );
+    next
+      .animate(
+        [{ transform: "translateY(100%)", opacity: 0 }, { transform: "translateY(0)", opacity: 1 }],
+        timing
+      )
+      .finished.then(() => {
+        if (!next.isConnected) return;
+        next.classList.remove("is-entering");
+        slot.replaceChildren(next);
+      })
+      .catch(() => {
+        // ถูกยกเลิกเพราะมีค่าใหม่เข้ามาก่อนเลื่อนจบ — รอบถัดไปจัดการต่อเอง
+      });
   }
 
   /** หน้า RSVP: สร้างตัวเลือกจำนวนคน และส่งฟอร์ม */

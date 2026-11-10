@@ -248,12 +248,25 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
-/* letter-spacing เติมช่องหลังตัวสุดท้ายด้วย จึงดึงกลับเท่ากันเพื่อให้ตัวเลขอยู่กลางคอลัมน์ */
+/* ตัวเลขแยกทีละหลัก แต่ละหลักเป็นช่องกว้างเท่ากันที่ซ่อนส่วนเกิน เพื่อให้เลื่อนขึ้นได้ */
 .countdown-num {
-  letter-spacing: var(--digit-tracking);
-  margin-right: calc(var(--digit-tracking) * -1);
-  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  gap: calc(var(--digit-tracking) - 0.1em);
 }
+
+.digit {
+  position: relative;
+  display: inline-block;
+  width: 0.62em;
+  height: 1.15em;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.digit-face { display: block; }
+.digit-face.is-entering { position: absolute; inset: 0; }
 
 .countdown-sep { padding: 0 0.12em; transform: translateY(-0.06em); }
 
