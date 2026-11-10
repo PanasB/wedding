@@ -272,5 +272,4 @@ footer {
   color: var(--color-muted);
   padding: calc(var(--space) * 3) var(--space);
   font-family: var(--font-display);
-  letter-spacing: 0.06em;
 }
