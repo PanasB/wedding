@@ -24,6 +24,39 @@
     <div class="countdown" id="countdown"></div>
   </section>
 
+  <section class="player" id="player" aria-label="เพลงของเรา">
+    <div class="player-art">
+      <div class="vinyl" aria-hidden="true"><span class="vinyl-label"><img src="images/logo-fang-frank.svg" alt="" /></span></div>
+      <div class="player-cover">
+        <img class="player-cover-photo" src="images/cover-fang-frank.jpg" alt="Fang และ Frank กับน้องหมา" />
+        <span class="player-cover-title" data-bind="music.title"></span>
+      </div>
+    </div>
+
+    <div class="player-bar">
+      <span class="player-time" id="player-current">00:00</span>
+      <input class="player-seek" id="player-seek" type="range" min="0" max="100" step="1" value="0" aria-label="ตำแหน่งในเพลง" disabled />
+      <span class="player-time" id="player-duration">--:--</span>
+    </div>
+
+    <div class="player-controls">
+      <button class="player-btn" id="player-restart" type="button" aria-label="เริ่มเพลงใหม่" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z" /></svg>
+      </button>
+      <button class="player-btn player-btn-main" id="player-toggle" type="button" aria-label="เล่นเพลง">
+        <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+      </button>
+      <button class="player-btn" id="player-loop" type="button" aria-label="เล่นวน" aria-pressed="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2zM17 17H7v-3l-4 4 4 4v-3h12v-6h-2z" /></svg>
+      </button>
+    </div>
+    <p class="player-status" id="player-status" role="status"></p>
+
+    <!-- ตัวเล่น YouTube ที่ให้เสียง · ซ่อนไว้ ผู้ชมเห็นแต่แผ่นเสียง -->
+    <div class="player-engine" aria-hidden="true"><div id="player-youtube"></div></div>
+  </section>
+
   <nav class="home-links" aria-label="ไปหน้าอื่น">
     <a class="btn" href="details.html">The Details</a>
     <a class="btn" href="rsvp.html">Kindly RSVP</a>
@@ -33,5 +66,6 @@
 
   <script src="config.js"></script>
   <script src="script.js"></script>
+  <script src="player.js"></script>
 </body>
 </html>

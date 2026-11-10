@@ -12,6 +12,12 @@ window.WEDDING = {
   dateText: "28.11.2027",
   greeting: "Time to Celebrate",
 
+  // เพลงบนแผ่นเสียงหน้า home ตามแบบ Canva · เล่นผ่าน YouTube
+  music: {
+    title: "My Love",
+    youtubeId: "gn7HgzOEdHU",
+  },
+
   schedule: [
     { time: "15:30", title: "พิธีขันหมาก · พิธีหมั้น" },
     { time: "16:09", title: "ไหว้ผู้ใหญ่" },
