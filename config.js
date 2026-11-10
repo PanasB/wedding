@@ -9,7 +9,7 @@ window.WEDDING = {
 
   // รูปแบบ ISO: YYYY-MM-DDTHH:mm:ss+07:00 (เวลาไทย) — ใช้นับถอยหลัง
   date: "2027-11-28T15:00:00+07:00",
-  dateText: "วันอาทิตย์ที่ 28 พฤศจิกายน 2570",
+  dateText: "28.11.2027",
   greeting: "Time to Celebrate",
 
   schedule: [

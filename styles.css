@@ -645,3 +645,10 @@ body[data-page="details"] .details-hero h1 .amp {
   font-family: var(--font-names);
   font-size: 0.8em;
 }
+
+/* วันงานบนหน้าข้อมูลเป็นตัวเขียนแบบเดียวกับชื่อ ตามแบบ Canva (Love The Date 28.11.2027) */
+body[data-page="details"] .date {
+  font-family: var(--font-names);
+  font-size: clamp(1.8rem, 7vw, 2.4rem);
+  line-height: 1.3;
+}
