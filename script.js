@@ -103,6 +103,41 @@
   /** หน้า home: นับถอยหลังถึงวันงาน */
   function initHome() {
     startCountdown(byId("countdown"), new Date(cfg.date).getTime());
+    addSparkles(document.querySelector(".mail-scene"));
+  }
+
+  /**
+   * ประกายทองระยิบระยับร่วงลงจากช่อดอกไม้สองข้างของชุดซองจดหมาย
+   * จุดเริ่มสุ่มอยู่ในช่อ (กรอบเป็น % ของชุดภาพ) · ประกายแต่ละเม็ดวนเล่นเองด้วย CSS
+   */
+  const SPARKLE_SOURCES = [
+    { left: [5, 21], top: [86, 98] }, // ช่อซ้ายล่าง: เริ่มที่ปลายช่อ ไม่ทับดอกไม้
+    { left: [76, 96], top: [30, 58] }, // ช่อขวาบน
+  ];
+  const SPARKLES_PER_SOURCE = 14;
+
+  function addSparkles(scene) {
+    if (!scene || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rand = (min, max) => min + Math.random() * (max - min);
+    const layer = document.createElement("span");
+    layer.className = "sparkles";
+    layer.setAttribute("aria-hidden", "true");
+    SPARKLE_SOURCES.forEach((src) => {
+      for (let i = 0; i < SPARKLES_PER_SOURCE; i += 1) {
+        const s = document.createElement("span");
+        s.className = "sparkle";
+        s.style.left = `${rand(...src.left).toFixed(1)}%`;
+        s.style.top = `${rand(...src.top).toFixed(1)}%`;
+        s.style.setProperty("--size", `${rand(9, 18).toFixed(1)}px`);
+        s.style.setProperty("--fall", `${rand(60, 130).toFixed(0)}px`);
+        s.style.setProperty("--drift", `${rand(-14, 14).toFixed(0)}px`);
+        s.style.setProperty("--dur", `${rand(3.8, 5.6).toFixed(2)}s`);
+        // เริ่มหลังดอกไม้ปรากฏ (ราว 1.6 วินาที) แล้วกระจายจังหวะไม่ให้ร่วงพร้อมกัน
+        s.style.setProperty("--delay", `${rand(1.6, 5.6).toFixed(2)}s`);
+        layer.append(s);
+      }
+    });
+    scene.append(layer);
   }
 
   /** หน้า details: กำหนดการ Dress code และแผนที่ */

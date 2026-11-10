@@ -34,11 +34,12 @@ window.WEDDING = {
     mapUrl: "https://maps.app.goo.gl/PkL8GgZwQ2kZ1cRt9",
   },
 
-  // สีของ Dress code ตามจุดสีในแบบ Canva
+  // สีของ Dress code ตามจุดสีในแบบ Canva (เรียงตามแบบ: แดง ฟ้า เขียว ชมพู ขาว)
   dressCode: [
     { name: "แดงเลือดหมู", color: "#892324" },
-    { name: "เขียวมะกอก", color: "#626c1d" },
     { name: "ฟ้า", color: "#5d82b0" },
+    { name: "เขียวมะกอก", color: "#626c1d" },
+    { name: "ชมพู", color: "#f4c1ce" },
     { name: "ขาว", color: "#ffffff" },
   ],
 
