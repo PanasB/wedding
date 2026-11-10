@@ -652,3 +652,15 @@ body[data-page="details"] .date {
   font-size: clamp(1.8rem, 7vw, 2.4rem);
   line-height: 1.3;
 }
+
+/* เนื้อหาหลักของหน้าข้อมูล (กำหนดการ · Dress code · สถานที่ · ปุ่ม) ใช้ Prompt */
+body[data-page="details"] main,
+body[data-page="details"] main h2,
+body[data-page="details"] main .timeline time,
+body[data-page="details"] main .btn {
+  font-family: "Prompt", var(--font-thai);
+}
+body[data-page="details"] main { font-weight: 300; }
+body[data-page="details"] main h2 { font-weight: 400; }
+body[data-page="details"] main .timeline time,
+body[data-page="details"] main .venue-name { font-weight: 500; }
