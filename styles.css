@@ -240,32 +240,138 @@ h2::after {
 .btn-outline { background: transparent; color: var(--color-accent-strong); }
 .btn:disabled { opacity: 0.6; cursor: wait; }
 
-/* ---------- ฟอร์ม ---------- */
-form { display: grid; gap: var(--space); text-align: left; }
-label { display: grid; gap: 4px; }
-fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 4px; }
-legend { padding: 0; margin-bottom: 4px; }
-.radio { display: flex; align-items: center; gap: 8px; }
+/* ---------- RSVP: ส่วนหัวตามแบบ Canva ---------- */
+.rsvp {
+  display: grid;
+  justify-items: center;
+  gap: var(--space);
+  padding-top: var(--space);
+  text-align: center;
+}
 
-input, textarea {
+.rsvp-title {
+  margin: 0;
+  font-size: clamp(2.2rem, 10vw, 3.2rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.rsvp-title::after { display: none; }
+
+.monogram {
+  width: 92px;
+  height: 116px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 4px var(--color-bg), inset 0 0 0 5px var(--color-accent);
+  font-family: var(--font-script);
+  font-size: 2.4rem;
+  color: var(--color-accent);
+}
+
+.rsvp-message { margin: 0; max-width: 30em; }
+
+/* ---------- RSVP: การ์ดฟอร์มสีแดงเลือดหมู ---------- */
+.rsvp-card {
+  --card-text: #fbf3ea;
+  --card-line: rgba(251, 243, 234, 0.5);
+  --card-fill: rgba(251, 243, 234, 0.1);
+  --card-fill-active: rgba(251, 243, 234, 0.24);
+
+  width: 100%;
+  display: grid;
+  gap: calc(var(--space) * 1.25);
+  padding: calc(var(--space) * 1.5);
+  text-align: left;
+  color: var(--card-text);
+  background: var(--color-accent-strong);
+  border: 2px solid #7f95b5;
+  border-radius: 12px;
+  box-shadow: 0 18px 36px -20px rgba(104, 31, 33, 0.6);
+}
+
+.rsvp-card-head p { margin: 0; }
+.rsvp-card-title { font-size: 1.3rem; font-weight: 600; }
+.rsvp-card-names {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.field[hidden] { display: none; }
+.field legend { padding: 0; margin-bottom: 8px; }
+#guest-options { display: grid; gap: 8px; }
+
+.field input:not([type="radio"]) {
   font: inherit;
-  color: inherit;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--card-text);
+  background: transparent;
+  border: 1px solid var(--card-line);
+  border-radius: 8px;
   padding: 10px 12px;
   width: 100%;
 }
-input:focus, textarea:focus {
-  outline: 2px solid var(--color-blush);
-  outline-offset: 1px;
-  border-color: var(--color-accent);
-}
-.radio input { width: auto; accent-color: var(--color-accent); }
-form .btn { justify-self: center; }
 
-.form-status { margin: 0; min-height: 1.7em; text-align: center; }
-.form-status.error { color: var(--color-error); }
+/* ตัวเลือกแบบปุ่มกด: ซ่อนวงกลม radio ไว้ แต่ยังโฟกัสด้วยคีย์บอร์ดได้ */
+.choice { position: relative; display: block; cursor: pointer; }
+.choice input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.choice span {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--card-fill);
+  font-weight: 500;
+}
+.choice input:checked + span {
+  background: var(--card-fill-active);
+  border-color: var(--card-text);
+}
+.choice input:checked + span::before { content: "✓ "; }
+
+.field input:focus-visible,
+.choice input:focus-visible + span {
+  outline: 2px solid var(--color-blush);
+  outline-offset: 2px;
+}
+
+.rsvp-submit {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 999px;
+  background: #8e2a2c;
+  color: var(--card-text);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rsvp-submit:hover { background: #a33537; }
+.rsvp-submit:disabled { opacity: 0.6; cursor: wait; }
+
+.form-status { margin: 0; min-height: 1.7em; text-align: center; font-size: 0.9rem; }
+.form-status.error { color: var(--color-blush); }
 
 footer {
   text-align: center;

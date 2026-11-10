@@ -41,29 +41,40 @@
       <a class="btn btn-outline" id="map-link" target="_blank" rel="noopener">เปิดแผนที่</a>
     </section>
 
-    <section class="card" id="rsvp">
-      <h2>ตอบรับคำเชิญ</h2>
-      <p class="rsvp-message" data-bind="rsvpMessage"></p>
-      <p class="muted">กรุณาตอบรับคำเชิญภายในวันที่ <span data-bind="rsvpDeadline"></span></p>
-      <form id="rsvp-form" novalidate>
-        <label>ชื่อ-นามสกุล
+    <section class="rsvp" id="rsvp">
+      <h2 class="rsvp-title">Kindly RSVP</h2>
+      <div class="monogram" id="monogram" aria-hidden="true"></div>
+      <p class="rsvp-message">
+        “<span data-bind="rsvpMessage"></span>
+        กรุณาตอบรับคำเชิญภายในวันที่ <span data-bind="rsvpDeadline"></span>”
+      </p>
+
+      <form class="rsvp-card" id="rsvp-form" novalidate>
+        <div class="rsvp-card-head">
+          <p class="rsvp-card-title">คำเชิญร่วมงานแต่งงาน</p>
+          <p class="rsvp-card-names" id="rsvp-names"></p>
+        </div>
+
+        <label class="field">คุณชื่ออะไร *
           <input name="name" required maxlength="100" autocomplete="name" />
         </label>
-        <label>เบอร์โทรศัพท์
-          <input name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{8,9}" maxlength="10" autocomplete="tel" />
-        </label>
-        <fieldset>
-          <legend>จะมาร่วมงานไหม</legend>
-          <label class="radio"><input type="radio" name="attending" value="yes" required /> ไปแน่นอน</label>
-          <label class="radio"><input type="radio" name="attending" value="no" /> ไม่สะดวก</label>
+
+        <fieldset class="field">
+          <legend>คุณสามารถมาร่วมงานได้ไหม *</legend>
+          <label class="choice"><input type="radio" name="attending" value="yes" required /><span>ได้ ฉันยินดีไปร่วมงาน</span></label>
+          <label class="choice"><input type="radio" name="attending" value="no" /><span>ขออภัย ไม่สะดวกไปร่วมงาน</span></label>
         </fieldset>
-        <label>จำนวนผู้ร่วมงาน (รวมตัวเอง)
-          <input name="guests" type="number" min="1" max="10" value="1" />
+
+        <fieldset class="field" id="guests-field">
+          <legend>จะมีผู้มางานนี้กี่คน (คุณ + ผู้ติดตาม)</legend>
+          <div id="guest-options"></div>
+        </fieldset>
+
+        <label class="field">ช่องทางและเบอร์โทรการติดต่อ
+          <input name="contact" maxlength="100" autocomplete="tel" />
         </label>
-        <label>คำอวยพร
-          <textarea name="message" rows="3" maxlength="500"></textarea>
-        </label>
-        <button class="btn" type="submit">ส่งคำตอบ</button>
+
+        <button class="rsvp-submit" type="submit">RSVP</button>
         <p class="form-status" id="form-status" role="status"></p>
       </form>
     </section>

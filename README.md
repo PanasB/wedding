@@ -5,8 +5,8 @@
 - ชื่อบ่าวสาว วันงาน และนับถอยหลัง
 - กำหนดการ และการแต่งกาย
 - สถานที่ พร้อมปุ่มเปิด Google Maps
-- ฟอร์มตอบรับ (RSVP) ส่งเข้า Google Sheets ได้
-- รองรับมือถือ และโหมดมืด
+- ฟอร์มตอบรับ (RSVP) ตามแบบ Canva ส่งเข้า Google Sheets ได้
+- รองรับมือถือ
 
 ## แก้เนื้อหา
 
@@ -22,14 +22,15 @@ npx --yes serve .
 
 ## ต่อฟอร์ม RSVP เข้า Google Sheets
 
-1. สร้าง Google Sheet ใหม่ แถวแรกใส่หัวคอลัมน์: `timestamp | name | phone | attending | guests | message`
+1. สร้าง Google Sheet ใหม่ แถวแรกใส่หัวคอลัมน์: `timestamp | name | attending | guests | contact`
+   (ตอบว่าไม่มา ช่อง `guests` จะว่าง)
 2. เมนู **Extensions → Apps Script** แล้ววางโค้ดนี้
 
    ```js
    function doPost(e) {
      const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
      const p = e.parameter;
-     sheet.appendRow([new Date(), p.name, p.phone, p.attending, p.guests, p.message]);
+     sheet.appendRow([new Date(), p.name, p.attending, p.guests || "", p.contact]);
      return ContentService.createTextOutput("ok");
    }
    ```

@@ -72,9 +72,40 @@
   }
   tick();
 
+  // ส่วนหัวของ RSVP: ตราอักษรย่อ และชื่อบนการ์ดฟอร์ม
+  const initials = cfg.names.map((n) => n.charAt(0)).join("");
+  document.getElementById("monogram").textContent = initials;
+  document.getElementById("rsvp-names").textContent = cfg.names.join(" & ");
+
+  // ตัวเลือกจำนวนผู้มางาน 1..rsvpMaxGuests
+  const guestOptions = document.getElementById("guest-options");
+  for (let n = 1; n <= cfg.rsvpMaxGuests; n += 1) {
+    const label = document.createElement("label");
+    label.className = "choice";
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "guests";
+    input.value = String(n);
+    input.checked = n === 1;
+    const text = document.createElement("span");
+    text.textContent = String(n);
+    label.append(input, text);
+    guestOptions.append(label);
+  }
+
   // ฟอร์ม RSVP
   const form = document.getElementById("rsvp-form");
   const status = document.getElementById("form-status");
+  const guestsField = document.getElementById("guests-field");
+
+  // ตอบว่าไม่มา: ซ่อนช่องจำนวนคน และไม่ส่งค่านี้ไปด้วย
+  function syncGuestsField() {
+    const notAttending = form.elements.attending.value === "no";
+    guestsField.hidden = notAttending;
+    guestsField.disabled = notAttending;
+  }
+  form.addEventListener("change", syncGuestsField);
+  form.addEventListener("reset", () => setTimeout(syncGuestsField));
   function setStatus(text, isError) {
     status.textContent = text;
     status.classList.toggle("error", Boolean(isError));
