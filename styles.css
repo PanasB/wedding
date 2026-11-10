@@ -707,3 +707,178 @@ footer {
 @media (prefers-reduced-motion: no-preference) {
   .page-title, .home-links { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
 }
+
+/* =====================================================================
+ * หน้า home: เครื่องเล่นแผ่นเสียงตามแบบ Canva (ปก + แผ่นเสียงโผล่ทางขวา + แถบเวลา + ปุ่ม)
+ * ===================================================================== */
+.player {
+  --player-width: min(340px, 86vw);
+  width: var(--player-width);
+  margin: 0 auto calc(var(--space) * 2.5);
+  display: grid;
+  gap: calc(var(--space) * 0.75);
+  justify-items: center;
+}
+
+.player-art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+.player-cover {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.18), transparent 60%),
+    linear-gradient(135deg, #8b8b8b, #3a3a3a);
+  box-shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.7);
+}
+.player-cover-title {
+  font-family: "Prompt", var(--font-thai);
+  font-weight: 500;
+  font-size: clamp(1rem, 5vw, 1.4rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* แผ่นเสียง: ร่องเป็นวง ๆ ฉลากแดงตรงกลาง */
+.vinyl {
+  position: absolute;
+  right: 0;
+  top: 2%;
+  height: 96%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle, transparent 0 30%, rgba(255, 255, 255, 0.06) 30.5% 31%, transparent 31.5%),
+    repeating-radial-gradient(circle, #111 0 2px, #1d1d1d 2px 4px),
+    #111;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.8);
+}
+.vinyl::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 30deg, transparent 0 20%, rgba(255, 255, 255, 0.12) 25%, transparent 32% 70%, rgba(255, 255, 255, 0.08) 75%, transparent 82%);
+}
+.vinyl-label {
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, #111 0 7%, #e03a3e 8% 100%);
+  color: #fff;
+  font-family: var(--font-script);
+  font-size: clamp(0.7rem, 3vw, 0.95rem);
+}
+
+.player-bar {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+.player-time {
+  font-family: "Prompt", var(--font-thai);
+  font-weight: 300;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--on-dark-muted, var(--color-muted));
+}
+
+.player-seek {
+  --progress: 0%;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--color-accent-contrast) var(--progress), rgba(245, 241, 231, 0.3) var(--progress));
+  cursor: pointer;
+}
+.player-seek::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent-contrast);
+}
+.player-seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-accent-contrast);
+}
+.player-seek:disabled { cursor: default; opacity: 0.6; }
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--space) * 1.5);
+}
+.player-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-accent-contrast);
+  cursor: pointer;
+}
+.player-btn svg { width: 22px; height: 22px; fill: currentColor; }
+.player-btn:disabled { opacity: 0.4; cursor: default; }
+.player-btn:focus-visible { outline: 2px solid var(--color-blush); outline-offset: 2px; }
+.player-btn-main { width: 52px; height: 52px; border: 1px solid rgba(245, 241, 231, 0.6); }
+.player-btn-main svg { width: 26px; height: 26px; }
+#player-loop[aria-pressed="false"] { opacity: 0.45; }
+
+.icon-pause { display: none; }
+.is-playing .icon-play { display: none; }
+.is-playing .icon-pause { display: block; }
+
+.player-status {
+  margin: 0;
+  min-height: 1.4em;
+  font-family: "Prompt", var(--font-thai);
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: var(--on-dark-muted, var(--color-muted));
+}
+
+/* ตัวเล่น YouTube ต้องอยู่ในหน้าเพื่อให้เสียงเล่นได้ แต่ไม่ให้เห็นและกดไม่ได้ */
+.player-engine {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vinyl { animation: spin 4s linear infinite; animation-play-state: paused; }
+  .is-playing .vinyl { animation-play-state: running; }
+  .player { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
