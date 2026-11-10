@@ -903,3 +903,10 @@ footer {
   filter: grayscale(1) contrast(1.05);
 }
 .player-cover-title { position: relative; z-index: 1; }
+
+/* ซูมเข้าหาหน้าบ่าวสาว (อยู่ราว 47% จากซ้าย 31% จากบนของภาพ) ให้หน้าเห็นชัดบนปกขนาดเล็ก */
+.player-cover-photo {
+  object-position: 47% 30%;
+  transform: scale(1.8);
+  transform-origin: 47% 31%;
+}
