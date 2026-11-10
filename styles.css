@@ -890,3 +890,16 @@ footer {
   object-fit: contain;
   display: block;
 }
+
+/* ภาพคู่บ่าวสาวบนปกแผ่นเสียง · ขาวดำตามแบบ Canva · ชื่อเพลงวางทับ */
+.player-cover { overflow: hidden; }
+.player-cover-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+  filter: grayscale(1) contrast(1.05);
+}
+.player-cover-title { position: relative; z-index: 1; }
