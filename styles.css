@@ -207,15 +207,64 @@ h1 {
   font-size: 1.1rem;
 }
 
-.countdown {
-  display: flex;
-  gap: calc(var(--space) * 1.25);
-  font-family: var(--font-display);
+/* ---------- แถบนับถอยหลังพื้นแดงเลือดหมู ตามแบบ Canva ---------- */
+.celebrate {
+  margin-bottom: calc(var(--space) * 2.5);
+  padding: calc(var(--space) * 2) var(--space) calc(var(--space) * 2.25);
+  background: var(--color-accent-strong);
+  color: var(--color-accent-contrast);
+  text-align: center;
 }
 
-.countdown div { display: flex; flex-direction: column; min-width: 52px; }
-.countdown strong { font-size: 1.9rem; font-weight: 500; color: var(--color-accent); line-height: 1.2; }
-.countdown span { font-size: 0.8rem; color: var(--color-muted); }
+.celebrate-title {
+  margin: 0 0 calc(var(--space) * 0.75);
+  font-family: "Prompt", var(--font-thai);
+  font-weight: 300;
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  line-height: 1.3;
+}
+
+.countdown {
+  --digit-tracking: 0.32em;
+  display: inline-grid;
+  grid-auto-columns: auto;
+  column-gap: 0.28em;
+  row-gap: 0.35em;
+  align-items: center;
+  font-size: clamp(2rem, 8.6vw, 4.4rem);
+}
+
+.countdown-num,
+.countdown-sep {
+  grid-row: 1;
+  font-family: "Prompt", var(--font-thai);
+  font-weight: 300;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* letter-spacing เติมช่องหลังตัวสุดท้ายด้วย จึงดึงกลับเท่ากันเพื่อให้ตัวเลขอยู่กลางคอลัมน์ */
+.countdown-num {
+  letter-spacing: var(--digit-tracking);
+  margin-right: calc(var(--digit-tracking) * -1);
+  text-align: center;
+}
+
+.countdown-sep { padding: 0 0.12em; transform: translateY(-0.06em); }
+
+.countdown-label {
+  grid-row: 2;
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 2.6vw, 1.15rem);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.countdown.is-done {
+  display: block;
+  font-family: var(--font-thai);
+  font-size: 1.4rem;
+}
 
 /* ---------- เนื้อหา ---------- */
 main {
@@ -483,7 +532,6 @@ footer {
   .rsvp > :nth-child(3) { animation-delay: 0.24s; }
   .letter > :nth-child(4),
   .details-hero > :nth-child(4) { animation-delay: 0.36s; }
-  .details-hero > :nth-child(5) { animation-delay: 0.48s; }
 
   /* ซองลอยเบา ๆ และตราครั่งมีแสงวาบ */
   .envelope { animation: float 4.5s ease-in-out 1s infinite; }
@@ -516,8 +564,8 @@ footer {
   .js #dress-code .swatches li:nth-child(4) .swatch { transition-delay: 0.24s; }
   .js #dress-code.is-visible .swatch { transform: scale(1); }
 
-  /* ตัวเลขวินาทีขยับทุกครั้งที่เปลี่ยน */
-  .countdown div:last-child strong { animation: tick 0.45s ease-out; }
+  /* แถบนับถอยหลังลอยขึ้นตามส่วนหัว */
+  .celebrate { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both; }
 
   /* ปุ่ม */
   .btn, .rsvp-submit { transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
@@ -542,6 +590,5 @@ footer {
   0%, 70%, 100% { filter: brightness(1); }
   80% { filter: brightness(1.18); }
 }
-@keyframes tick { from { opacity: 0.2; transform: translateY(-6px); } }
 @keyframes pop { 50% { transform: scale(1.03); } }
 @keyframes beat { 50% { transform: scale(1.25); } }

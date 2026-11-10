@@ -94,32 +94,51 @@
     startCountdown(byId("countdown"), new Date(cfg.date).getTime());
   }
 
+  /**
+   * นับถอยหลังแบบ "383 : 03 : 31 : 12" ตามแบบ Canva
+   * สร้างโครงครั้งเดียว แล้วเปลี่ยนเฉพาะตัวเลขทุกวินาที
+   * ตำแหน่งในกริด: ตัวเลขอยู่แถว 1 ป้ายอยู่แถว 2 ใต้ตัวเลขของตัวเอง ส่วน ":" อยู่คอลัมน์คั่นกลาง
+   */
   function startCountdown(el, target) {
     const units = [
-      ["วัน", 86400000],
-      ["ชั่วโมง", 3600000],
-      ["นาที", 60000],
-      ["วินาที", 1000],
+      { label: "Days", ms: 86400000, pad: 1 },
+      { label: "Hours", ms: 3600000, pad: 2 },
+      { label: "Min", ms: 60000, pad: 2 },
+      { label: "Sec", ms: 1000, pad: 2 },
     ];
+    const numbers = units.map((unit, i) => {
+      const column = String(i * 2 + 1);
+      const num = document.createElement("span");
+      num.className = "countdown-num";
+      num.style.gridColumn = column;
+      const label = document.createElement("span");
+      label.className = "countdown-label";
+      label.style.gridColumn = column;
+      label.textContent = unit.label;
+      el.append(num, label);
+      if (i < units.length - 1) {
+        const sep = document.createElement("span");
+        sep.className = "countdown-sep";
+        sep.style.gridColumn = String(i * 2 + 2);
+        sep.setAttribute("aria-hidden", "true");
+        sep.textContent = ":";
+        el.append(sep);
+      }
+      return num;
+    });
+
     function tick() {
       let diff = target - Date.now();
       if (diff <= 0) {
         el.textContent = "วันนี้คือวันสำคัญของเรา";
+        el.classList.add("is-done");
         return;
       }
-      el.replaceChildren(
-        ...units.map(([label, ms]) => {
-          const n = Math.floor(diff / ms);
-          diff -= n * ms;
-          const box = document.createElement("div");
-          const strong = document.createElement("strong");
-          strong.textContent = String(n);
-          const span = document.createElement("span");
-          span.textContent = label;
-          box.append(strong, span);
-          return box;
-        })
-      );
+      units.forEach((unit, i) => {
+        const n = Math.floor(diff / unit.ms);
+        diff -= n * unit.ms;
+        numbers[i].textContent = String(n).padStart(unit.pad, "0");
+      });
       setTimeout(tick, 1000);
     }
     tick();
