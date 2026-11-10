@@ -1,12 +1,15 @@
 # Wedding — เว็บการ์ดเชิญ + RSVP
 
-เว็บการ์ดเชิญงานแต่ง (HTML/CSS/JS ล้วน ไม่ต้อง build) แบ่งเป็นสามหน้าตามแบบ Canva
+เว็บการ์ดเชิญงานแต่ง (HTML/CSS/JS ล้วน ไม่ต้อง build) แบ่งเป็นสี่หน้าตามแบบ Canva
 
 | หน้า | ไฟล์ | มีอะไร |
 |---|---|---|
-| 1. จดหมาย | `index.html` | ซองจดหมายพร้อมตราครั่ง กดซองแล้วฝาซองเปิดและไปหน้าข้อมูล |
-| 2. ข้อมูล | `details.html` | ชื่อ วันงาน นับถอยหลัง กำหนดการ Dress code สถานที่ + Google Maps |
-| 3. RSVP | `rsvp.html` | ฟอร์มตอบรับ ส่งเข้า Google Sheets ได้ |
+| 1. Welcome | `welcome.html` | ซองจดหมายพร้อมตราครั่ง กดซองแล้วฝาซองเปิดและไปหน้า home |
+| 2. Home | `home.html` | ชื่อ วันงาน นับถอยหลัง ปุ่มไปหน้า details และ RSVP |
+| 3. Details | `details.html` | กำหนดการ Dress code สถานที่ + Google Maps |
+| 4. RSVP | `rsvp.html` | ฟอร์มตอบรับ ส่งเข้า Google Sheets ได้ |
+
+`index.html` พาไปหน้า welcome อัตโนมัติ (ลิงก์หลักของเว็บ)
 
 ทุกหน้าใช้ `config.js` · `script.js` · `styles.css` ร่วมกัน และรองรับมือถือ
 

@@ -615,65 +615,95 @@ footer {
  * หน้า 2 (ข้อมูล): พื้นแดงเลือดหมูทั้งหน้าตามแบบ Canva
  * ตัวอักษรบนพื้นเป็นสีครีม · กล่องเนื้อหายังเป็นพื้นครีม ตัวอักษรแดง
  * ===================================================================== */
-body[data-page="details"] {
+.theme-dark {
   --on-dark: var(--color-accent-contrast);
   --on-dark-muted: rgba(245, 241, 231, 0.72);
   background: var(--color-accent-strong);
   color: var(--on-dark);
 }
 
-body[data-page="details"] .text-link { color: var(--on-dark-muted); }
-body[data-page="details"] .text-link:hover { color: var(--on-dark); }
-body[data-page="details"] .details-hero h1,
-body[data-page="details"] .date { color: var(--on-dark); }
-body[data-page="details"] .amp,
-body[data-page="details"] .full-names { color: var(--color-blush); }
+.theme-dark .text-link { color: var(--on-dark-muted); }
+.theme-dark .text-link:hover { color: var(--on-dark); }
+.theme-dark .details-hero h1,
+.theme-dark .date { color: var(--on-dark); }
+.theme-dark .amp,
+.theme-dark .full-names { color: var(--color-blush); }
 
 /* แถบนับถอยหลังกลืนกับพื้นหน้า */
-body[data-page="details"] .celebrate { background: transparent; }
+.theme-dark .celebrate { background: transparent; }
 
-body[data-page="details"] .card {
+.theme-dark .card {
   color: var(--color-text);
   border-color: transparent;
   box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.55);
 }
 
-body[data-page="details"] .cta .btn {
+.theme-dark .cta .btn {
   background: var(--color-accent-contrast);
   color: var(--color-accent-strong);
   border-color: var(--color-accent-contrast);
 }
 
-body[data-page="details"] footer { color: var(--on-dark-muted); }
+.theme-dark footer { color: var(--on-dark-muted); }
 
 /* ชื่อบ่าวสาวบนหน้าข้อมูลเป็นตัวเขียน Snell Roundhand ตามแบบ Canva */
-body[data-page="details"] .details-hero h1 {
+.theme-dark .details-hero h1 {
   font-family: var(--font-names);
   font-weight: 400;
   text-transform: none;
   font-size: clamp(2.6rem, 11vw, 4rem);
   line-height: 1.25;
 }
-body[data-page="details"] .details-hero h1 .amp {
+.theme-dark .details-hero h1 .amp {
   font-family: var(--font-names);
   font-size: 0.8em;
 }
 
 /* วันงานบนหน้าข้อมูลเป็นตัวเขียนแบบเดียวกับชื่อ ตามแบบ Canva (Love The Date 28.11.2027) */
-body[data-page="details"] .date {
+.theme-dark .date {
   font-family: var(--font-names);
   font-size: clamp(1.8rem, 7vw, 2.4rem);
   line-height: 1.3;
 }
 
 /* เนื้อหาหลักของหน้าข้อมูล (กำหนดการ · Dress code · สถานที่ · ปุ่ม) ใช้ Prompt */
-body[data-page="details"] main,
-body[data-page="details"] main h2,
-body[data-page="details"] main .timeline time,
-body[data-page="details"] main .btn {
+.theme-dark main,
+.theme-dark main h2,
+.theme-dark main .timeline time,
+.theme-dark main .btn {
   font-family: "Prompt", var(--font-thai);
 }
-body[data-page="details"] main { font-weight: 300; }
-body[data-page="details"] main h2 { font-weight: 400; }
-body[data-page="details"] main .timeline time,
-body[data-page="details"] main .venue-name { font-weight: 500; }
+.theme-dark main { font-weight: 300; }
+.theme-dark main h2 { font-weight: 400; }
+.theme-dark main .timeline time,
+.theme-dark main .venue-name { font-weight: 500; }
+
+/* หน้า home: ปุ่มไปหน้า details และ RSVP */
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space);
+  padding: 0 var(--space) var(--space);
+}
+.theme-dark .home-links .btn {
+  font-family: "Prompt", var(--font-thai);
+  background: var(--color-accent-contrast);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent-contrast);
+  min-width: 160px;
+  text-align: center;
+}
+
+/* หัวหน้า details */
+.page-title { text-align: center; padding: var(--space) var(--space) calc(var(--space) * 2); }
+.theme-dark .page-title h1 {
+  font-family: var(--font-names);
+  font-weight: 400;
+  text-transform: none;
+  font-size: clamp(2.6rem, 11vw, 4rem);
+  color: var(--on-dark);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-title, .home-links { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+}

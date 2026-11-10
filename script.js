@@ -21,6 +21,33 @@
     });
   }
 
+  /**
+   * ปุ่ม "Go back" กลับไปหน้าที่เพิ่งมาจริง (เช่น RSVP ที่เข้าได้ทั้งจาก home และ details)
+   * ถ้าหน้าก่อนหน้าไม่ใช่หน้าในเว็บนี้ (เปิดลิงก์ตรง · มาจาก LINE) ใช้ href ที่ตั้งไว้เป็นทางสำรอง
+   */
+  function initBackLinks() {
+    document.querySelectorAll(".page-nav a").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        if (!cameFromThisSite()) return;
+        event.preventDefault();
+        history.back();
+      });
+    });
+  }
+
+  function cameFromThisSite() {
+    if (!document.referrer || history.length < 2) return false;
+    try {
+      const prev = new URL(document.referrer);
+      const sitePath = location.pathname.replace(/[^/]*$/, "");
+      return prev.origin === location.origin && prev.pathname.startsWith(sitePath)
+        && prev.pathname !== location.pathname;
+    } catch (err) {
+      console.warn("referrer is not a valid URL", err);
+      return false;
+    }
+  }
+
   /** ใส่ class is-visible ให้ [data-reveal] เมื่อเลื่อนมาถึง เพื่อเล่นอนิเมชันปรากฏ */
   function initReveal() {
     const targets = document.querySelectorAll("[data-reveal]");
@@ -41,11 +68,11 @@
     targets.forEach((el) => observer.observe(el));
   }
 
-  /** เวลาที่ฝาซองเปิดและกระดาษเลื่อนออกจนสุด ก่อนเปลี่ยนไปหน้าข้อมูล */
+  /** เวลาที่ฝาซองเปิดและกระดาษเลื่อนออกจนสุด ก่อนเปลี่ยนไปหน้า home */
   const OPEN_LETTER_MS = 1200;
 
-  /** หน้าจดหมาย: กดซองแล้วฝาซองเปิด กระดาษเลื่อนออก แล้วจึงไปหน้าข้อมูล */
-  function initLetter() {
+  /** หน้า welcome: กดซองแล้วฝาซองเปิด กระดาษเลื่อนออก แล้วจึงไปหน้า home */
+  function initWelcome() {
     const link = byId("open-letter");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     link.addEventListener("click", (event) => {
@@ -63,7 +90,12 @@
     });
   }
 
-  /** หน้าข้อมูล: กำหนดการ Dress code แผนที่ และนับถอยหลัง */
+  /** หน้า home: นับถอยหลังถึงวันงาน */
+  function initHome() {
+    startCountdown(byId("countdown"), new Date(cfg.date).getTime());
+  }
+
+  /** หน้า details: กำหนดการ Dress code และแผนที่ */
   function initDetails() {
     byId("map-link").href = cfg.venue.mapUrl;
 
@@ -90,8 +122,6 @@
       li.append(time, title);
       timeline.append(li);
     });
-
-    startCountdown(byId("countdown"), new Date(cfg.date).getTime());
   }
 
   /**
@@ -288,7 +318,8 @@
 
   renderShared();
   initReveal();
-  const pages = { letter: initLetter, details: initDetails, rsvp: initRsvp };
+  initBackLinks();
+  const pages = { welcome: initWelcome, home: initHome, details: initDetails, rsvp: initRsvp };
   const init = pages[document.body.dataset.page];
   if (init) init();
 })();
