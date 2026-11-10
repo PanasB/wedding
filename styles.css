@@ -592,3 +592,45 @@ footer {
 }
 @keyframes pop { 50% { transform: scale(1.03); } }
 @keyframes beat { 50% { transform: scale(1.25); } }
+
+/* =====================================================================
+ * หน้า 2 (ข้อมูล): พื้นแดงเลือดหมูทั้งหน้าตามแบบ Canva
+ * ตัวอักษรบนพื้นเป็นสีครีม · กล่องเนื้อหายังเป็นพื้นครีม ตัวอักษรแดง
+ * ===================================================================== */
+body[data-page="details"] {
+  --on-dark: var(--color-accent-contrast);
+  --on-dark-muted: rgba(245, 241, 231, 0.72);
+  background: var(--color-accent-strong);
+  color: var(--on-dark);
+}
+
+body[data-page="details"] .text-link { color: var(--on-dark-muted); }
+body[data-page="details"] .text-link:hover { color: var(--on-dark); }
+body[data-page="details"] .details-hero h1,
+body[data-page="details"] .date { color: var(--on-dark); }
+body[data-page="details"] .amp,
+body[data-page="details"] .full-names { color: var(--color-blush); }
+
+/* แถบนับถอยหลังกลืนกับพื้นหน้า เหลือเส้นครีมบาง ๆ บอกขอบเขต */
+body[data-page="details"] .celebrate {
+  background: transparent;
+  border-top: 1px solid rgba(245, 241, 231, 0.25);
+  border-bottom: 1px solid rgba(245, 241, 231, 0.25);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body[data-page="details"] .card {
+  color: var(--color-text);
+  border-color: transparent;
+  box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.55);
+}
+
+body[data-page="details"] .cta .btn {
+  background: var(--color-accent-contrast);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent-contrast);
+}
+
+body[data-page="details"] footer { color: var(--on-dark-muted); }
