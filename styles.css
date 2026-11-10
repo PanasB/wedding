@@ -882,3 +882,11 @@ footer {
   .player { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* โลโก้ Fang & Frank (สีขาว) บนฉลากแผ่นเสียง · หมุนไปพร้อมแผ่น */
+.vinyl-label img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  display: block;
+}

@@ -22,10 +22,16 @@
   const API_TIMEOUT_MS = 15000;
   /** ความถี่ในการอัปเดตเวลาและแถบเพลงระหว่างเล่น */
   const PROGRESS_INTERVAL_MS = 250;
+  /** สั่งเล่นอัตโนมัติแล้วรอเท่านี้ ถ้ายังไม่เล่นแปลว่าเบราว์เซอร์บล็อกการเล่นพร้อมเสียง */
+  const AUTOPLAY_CHECK_MS = 1500;
+  /** แตะครั้งแรกเพื่อเปิดเสียง ไม่นับเป็นการกดหยุดเพลง ถ้าเกิดในช่วงนี้ */
+  const UNMUTE_GRACE_MS = 600;
 
   let player = null;
   let ready = false;
-  let wantPlay = false;
+  let wantPlay = true; // เข้าหน้า home แล้วเล่นเพลงเลย
+  let mutedAutoplay = false;
+  let unmutedAt = 0;
   let looping = loopBtn.getAttribute("aria-pressed") === "true";
   let progressTimer = 0;
   let dragging = false;
@@ -85,7 +91,7 @@
           status.textContent = "";
           [seek, restartBtn].forEach((el) => { el.disabled = false; });
           updateProgress();
-          if (wantPlay) player.playVideo();
+          if (wantPlay) autoplay();
         },
         onStateChange: (event) => onStateChange(event.data),
         onError: () => fail("เพลงนี้เล่นบนเว็บไม่ได้"),
@@ -108,6 +114,38 @@
     }
   }
 
+  /**
+   * เล่นอัตโนมัติ: ลองเล่นพร้อมเสียงก่อน · เบราว์เซอร์ส่วนใหญ่ (โดยเฉพาะมือถือ) บล็อกเสียง
+   * ถ้าผู้ชมยังไม่ได้แตะหน้าเว็บ จึงถอยไปเล่นแบบปิดเสียง (แผ่นยังหมุน) แล้วเปิดเสียงเมื่อแตะครั้งแรก
+   */
+  function autoplay() {
+    player.playVideo();
+    setTimeout(() => {
+      if (player.getPlayerState() === window.YT.PlayerState.PLAYING) return;
+      mutedAutoplay = true;
+      player.mute();
+      player.playVideo();
+      root.classList.add("is-muted");
+      status.textContent = "แตะที่ใดก็ได้เพื่อเปิดเสียงเพลง";
+      ["pointerdown", "keydown", "touchstart"].forEach((type) =>
+        document.addEventListener(type, unmuteOnFirstTouch, { capture: true, once: true })
+      );
+    }, AUTOPLAY_CHECK_MS);
+  }
+
+  function unmuteOnFirstTouch() {
+    if (!mutedAutoplay) return;
+    mutedAutoplay = false;
+    unmutedAt = Date.now();
+    player.unMute();
+    player.playVideo();
+    root.classList.remove("is-muted");
+    status.textContent = "";
+    ["pointerdown", "keydown", "touchstart"].forEach((type) =>
+      document.removeEventListener(type, unmuteOnFirstTouch, { capture: true })
+    );
+  }
+
   function fail(message) {
     status.textContent = message;
     root.classList.add("is-unavailable");
@@ -121,6 +159,8 @@
       if (!player) loadApi();
       return;
     }
+    // การแตะครั้งนี้เพิ่งใช้เปิดเสียงไป ไม่ใช่การสั่งหยุด
+    if (Date.now() - unmutedAt < UNMUTE_GRACE_MS) return;
     if (root.classList.contains("is-playing")) player.pauseVideo();
     else player.playVideo();
   });
@@ -146,7 +186,7 @@
     if (ready) player.seekTo(Number(seek.value), true);
   });
 
-  // โหลด API ไว้ล่วงหน้าเมื่อหน้าว่าง เพื่อให้กดเล่นแล้วเสียงมาเร็ว
-  if ("requestIdleCallback" in window) window.requestIdleCallback(() => { if (!player) loadApi(); });
-  else setTimeout(() => { if (!player) loadApi(); }, 1500);
+  // โหลดตัวเล่นทันทีที่เข้าหน้า เพื่อเริ่มเพลงให้เร็วที่สุด
+  status.textContent = "กำลังเปิดเพลง…";
+  loadApi();
 })();
