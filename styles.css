@@ -20,6 +20,11 @@
   --space: 16px;
   --font-display: "Cormorant Garamond", "Noto Serif Thai", serif;
   --font-script: "Pinyon Script", cursive;
+  /*
+   * ชื่อบ่าวสาวตามแบบ Canva · Snell Roundhand เป็นฟอนต์มีลิขสิทธิ์ที่ติดมากับ iOS/macOS
+   * จึงเรียกจากเครื่องผู้ชม · เครื่องที่ไม่มี (Android/Windows) ใช้ Pinyon Script แทน
+   */
+  --font-names: "Snell Roundhand", "Pinyon Script", cursive;
   --font-thai: "Noto Serif Thai", serif;
   /* ใช้กับข้อความละตินเท่านั้น — ระยะห่างตัวอักษรทำให้สระและวรรณยุกต์ไทยแยกจากพยัญชนะ */
   --tracking: 0.18em;
@@ -627,3 +632,16 @@ body[data-page="details"] .cta .btn {
 }
 
 body[data-page="details"] footer { color: var(--on-dark-muted); }
+
+/* ชื่อบ่าวสาวบนหน้าข้อมูลเป็นตัวเขียน Snell Roundhand ตามแบบ Canva */
+body[data-page="details"] .details-hero h1 {
+  font-family: var(--font-names);
+  font-weight: 400;
+  text-transform: none;
+  font-size: clamp(2.6rem, 11vw, 4rem);
+  line-height: 1.25;
+}
+body[data-page="details"] .details-hero h1 .amp {
+  font-family: var(--font-names);
+  font-size: 0.8em;
+}
