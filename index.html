@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>การ์ดเชิญงานแต่ง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;600&family=Noto+Sans+Thai:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow" data-bind="greeting"></p>
+    <h1><span data-bind="groom"></span> <span class="amp">&amp;</span> <span data-bind="bride"></span></h1>
+    <p class="date" data-bind="dateText"></p>
+    <div class="countdown" id="countdown" aria-live="polite"></div>
+    <a class="btn" href="#rsvp">ตอบรับคำเชิญ</a>
+  </header>
+
+  <main>
+    <section class="card" id="schedule">
+      <h2>กำหนดการ</h2>
+      <ol class="timeline" id="timeline"></ol>
+      <p class="muted">การแต่งกาย: <span data-bind="dressCode"></span></p>
+    </section>
+
+    <section class="card" id="venue">
+      <h2>สถานที่</h2>
+      <p class="venue-name" data-bind="venue.name"></p>
+      <p class="muted" data-bind="venue.address"></p>
+      <a class="btn btn-outline" id="map-link" target="_blank" rel="noopener">เปิดแผนที่</a>
+    </section>
+
+    <section class="card" id="rsvp">
+      <h2>ตอบรับคำเชิญ</h2>
+      <p class="muted">กรุณาตอบกลับภายใน <span data-bind="rsvpDeadline"></span></p>
+      <form id="rsvp-form" novalidate>
+        <label>ชื่อ-นามสกุล
+          <input name="name" required maxlength="100" autocomplete="name" />
+        </label>
+        <label>เบอร์โทรศัพท์
+          <input name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{8,9}" maxlength="10" autocomplete="tel" />
+        </label>
+        <fieldset>
+          <legend>จะมาร่วมงานไหม</legend>
+          <label class="radio"><input type="radio" name="attending" value="yes" required /> ไปแน่นอน</label>
+          <label class="radio"><input type="radio" name="attending" value="no" /> ไม่สะดวก</label>
+        </fieldset>
+        <label>จำนวนผู้ร่วมงาน (รวมตัวเอง)
+          <input name="guests" type="number" min="1" max="10" value="1" />
+        </label>
+        <label>คำอวยพร
+          <textarea name="message" rows="3" maxlength="500"></textarea>
+        </label>
+        <button class="btn" type="submit">ส่งคำตอบ</button>
+        <p class="form-status" id="form-status" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>ขอบคุณที่ร่วมเป็นส่วนหนึ่งในวันสำคัญของเรา</footer>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
