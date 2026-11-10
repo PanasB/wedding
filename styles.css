@@ -35,17 +35,57 @@ body {
   line-height: 1.7;
 }
 
-/* ---------- ส่วนหัว: ซองจดหมาย ---------- */
-.hero {
-  min-height: 92vh;
+/* ---------- ลิงก์ข้อความ และแถบย้อนกลับ ---------- */
+.text-link {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.text-link:hover { color: var(--color-accent); }
+
+.page-nav {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space);
+}
+
+/* ---------- หน้า 1: จดหมาย ---------- */
+.letter {
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: calc(var(--space) * 3) var(--space);
   gap: calc(var(--space) * 1.25);
 }
+
+.envelope-link {
+  display: block;
+  transition: transform 0.25s ease;
+}
+.envelope-link:hover { transform: translateY(-4px); }
+.envelope-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+}
+
+/* ---------- หน้า 2: ส่วนหัวของหน้าข้อมูล ---------- */
+.details-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space);
+  padding: var(--space) var(--space) calc(var(--space) * 2.5);
+}
+.details-hero p { margin: 0; }
+
+.cta { text-align: center; padding: var(--space) 0; }
 
 .letter-from {
   margin: 0;
@@ -75,6 +115,7 @@ h1 {
 }
 
 .envelope {
+  display: block;
   position: relative;
   width: min(320px, 82vw);
   aspect-ratio: 3 / 2;
@@ -95,7 +136,12 @@ h1 {
   background: linear-gradient(180deg, #7a2224 0%, var(--color-accent-strong) 100%);
   clip-path: polygon(0 0, 100% 0, 50% 58%);
   filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+  transition: clip-path 0.5s ease;
 }
+
+/* กดซองแล้ว: ฝาซองพับขึ้น ตราครั่งจางหาย */
+.is-open .envelope::before { clip-path: polygon(0 0, 100% 0, 50% 0); }
+.is-open .seal { opacity: 0; }
 
 /* เส้นพับด้านล่าง */
 .envelope::after {
@@ -120,6 +166,13 @@ h1 {
   color: #8a6420;
   font-family: var(--font-script);
   font-size: clamp(1.2rem, 5vw, 1.6rem);
+  transition: opacity 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope-link,
+  .envelope::before,
+  .seal { transition: none; }
 }
 
 .date {

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ตอบรับคำเชิญ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&family=Noto+Serif+Thai:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="rsvp">
+  <nav class="page-nav"><a class="text-link" href="details.html">← Go back</a></nav>
+
+  <main>
+    <section class="rsvp" id="rsvp">
+      <h1 class="rsvp-title">Kindly RSVP</h1>
+      <div class="monogram" data-initials aria-hidden="true"></div>
+      <p class="rsvp-message">
+        “<span data-bind="rsvpMessage"></span>
+        กรุณาตอบรับคำเชิญภายในวันที่ <span data-bind="rsvpDeadline"></span>”
+      </p>
+
+      <form class="rsvp-card" id="rsvp-form" novalidate>
+        <div class="rsvp-card-head">
+          <p class="rsvp-card-title">คำเชิญร่วมงานแต่งงาน</p>
+          <p class="rsvp-card-names" id="rsvp-names"></p>
+        </div>
+
+        <label class="field">คุณชื่ออะไร *
+          <input name="name" required maxlength="100" autocomplete="name" />
+        </label>
+
+        <fieldset class="field">
+          <legend>คุณสามารถมาร่วมงานได้ไหม *</legend>
+          <label class="choice"><input type="radio" name="attending" value="yes" required /><span>ได้ ฉันยินดีไปร่วมงาน</span></label>
+          <label class="choice"><input type="radio" name="attending" value="no" /><span>ขออภัย ไม่สะดวกไปร่วมงาน</span></label>
+        </fieldset>
+
+        <fieldset class="field" id="guests-field">
+          <legend>จะมีผู้มางานนี้กี่คน (คุณ + ผู้ติดตาม)</legend>
+          <div id="guest-options"></div>
+        </fieldset>
+
+        <label class="field">ช่องทางและเบอร์โทรการติดต่อ
+          <input name="contact" maxlength="100" autocomplete="tel" />
+        </label>
+
+        <button class="rsvp-submit" type="submit">RSVP</button>
+        <p class="form-status" id="form-status" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>ขอบคุณที่ร่วมเป็นส่วนหนึ่งในวันสำคัญของเรา</footer>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
